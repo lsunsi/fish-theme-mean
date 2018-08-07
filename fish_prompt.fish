@@ -11,6 +11,12 @@ function fish_prompt
   print (prompt_pwd)' ' 'brblack'
 end
 
+function _git_head_ref
+  git rev-parse --abbrev-ref HEAD 2> /dev/null
+end
+
 function fish_right_prompt
-  print 'Mundo' 'red'
+  set branch (_git_head_ref)
+
+  print "$branch" 'brblack'
 end

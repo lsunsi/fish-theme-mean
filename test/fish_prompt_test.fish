@@ -19,13 +19,33 @@ cd $path
 
 assert 'base path' \
   '/p/t/fish-theme-mean-test ' 'brblack' \
-  'Mundo' 'red'
+  '' 'brblack'
 
 mkdir $path/repo
 cd $path/repo
 
 assert 'into inner folder' \
   '/p/t/f/repo ' 'brblack' \
-  'Mundo' 'red'
+  '' 'brblack'
+
+git init
+
+assert 'init repository' \
+  '/p/t/f/repo ' 'brblack' \
+  'HEAD' 'brblack'
+
+touch file
+git add file
+git -c user.name=mariza -c user.email=mariza commit -m 'first commit'
+
+assert 'first commit' \
+  '/p/t/f/repo ' 'brblack' \
+  'master' 'brblack'
+
+git checkout -b 'dev'
+
+assert 'get into new branch' \
+  '/p/t/f/repo ' 'brblack' \
+  'dev' 'brblack'
 
 rm -rf $path
