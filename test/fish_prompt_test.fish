@@ -11,6 +11,21 @@ function assert -d \
   end
 end
 
-assert 'initial' \
-  'Oie' 'blue' \
+set path '/tmp/fish-theme-mean-test'
+
+rm -rf $path
+mkdir $path
+cd $path
+
+assert 'base path' \
+  '/p/t/fish-theme-mean-test ' 'brblack' \
   'Mundo' 'red'
+
+mkdir $path/repo
+cd $path/repo
+
+assert 'into inner folder' \
+  '/p/t/f/repo ' 'brblack' \
+  'Mundo' 'red'
+
+rm -rf $path

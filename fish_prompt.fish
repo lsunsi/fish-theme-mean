@@ -8,7 +8,7 @@ function print -d 'args: text color'
 end
 
 function fish_prompt
-  print 'Oie' 'blue'
+  print (prompt_pwd)' ' 'brblack'
 end
 
 function fish_right_prompt
