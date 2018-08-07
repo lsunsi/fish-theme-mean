@@ -15,8 +15,18 @@ function _git_head_ref
   git rev-parse --abbrev-ref HEAD 2> /dev/null
 end
 
-function fish_right_prompt
-  set branch (_git_head_ref)
+function _git_color
+  set git_status (git status -s 2> /dev/null)
+  if [ "$git_status" ]
+    echo 'yellow'
+  else
+    echo 'brblack'
+  end
+end
 
-  print "$branch" 'brblack'
+function fish_right_prompt
+  set text (_git_head_ref)
+  set color (_git_color)
+
+  print "$text" "$color"
 end

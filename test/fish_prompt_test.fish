@@ -35,6 +35,11 @@ assert 'init repository' \
   'HEAD' 'brblack'
 
 touch file
+
+assert 'first commit' \
+  '/p/t/f/repo ' 'brblack' \
+  'HEAD' 'yellow'
+
 git add file
 git -c user.name=mariza -c user.email=mariza commit -m 'first commit'
 
