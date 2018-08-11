@@ -83,6 +83,12 @@ git reset --hard HEAD~1
 
 assert 'behind remote' \
   '/p/t/f/repo ' 'brblack' \
+  'dev' 'brred'
+
+git pull
+
+assert 'reresynced remote' \
+  '/p/t/f/repo ' 'brblack' \
   'dev' 'brblack'
 
 rm -rf $path
