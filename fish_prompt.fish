@@ -37,7 +37,7 @@ function __mean_git_color
   else if [ -n "$ahead" -a "$ahead" != '0' ]
     echo 'cyan'
   else
-    echo 'brblack'
+    echo 'white'
   end
 end
 
@@ -56,7 +56,7 @@ function __mean_print -d 'args: text color options'
 end
 
 function fish_prompt
-  __mean_print (prompt_pwd)' ' 'brblack'
+  __mean_print (prompt_pwd)' ' 'white'
 end
 
 function fish_right_prompt
