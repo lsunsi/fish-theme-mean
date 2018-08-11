@@ -17,6 +17,10 @@ function __mean_git_revlist_count
   git rev-list --count "$argv[1]..$argv[2]" 2> /dev/null
 end
 
+function __mean_git_stash_list
+  git stash list 2> /dev/null
+end
+
 function __mean_git_color
   set branches (__mean_git_branches)
   set local (echo $branches | awk '{ print $1 }')
@@ -37,8 +41,16 @@ function __mean_git_color
   end
 end
 
-function __mean_print -d 'args: text color'
-  set_color $argv[2]
+function __mean_git_color_options
+  set stash (__mean_git_stash_list)
+
+  if [ "$stash" ]
+    echo '-u'
+  end
+end
+
+function __mean_print -d 'args: text color options'
+  set_color $argv[3] $argv[2]
   echo -n $argv[1]
   set_color normal
 end
@@ -50,6 +62,7 @@ end
 function fish_right_prompt
   set text (__mean_git_head_ref)
   set color (__mean_git_color)
+  set options (__mean_git_color_options)
 
-  __mean_print "$text" "$color"
+  __mean_print "$text" "$color" $options
 end

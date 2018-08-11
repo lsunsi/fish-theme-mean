@@ -1,13 +1,17 @@
 source $DIRNAME/../fish_prompt.fish
 
+function git_
+  git $argv > /dev/null ^ /dev/null
+end
+
 function assert -d \
   'checks the value and color for each prompt.
-   args: description left-text left-color right-text right-color'
+   args: description left-text right-text right-color right-options'
   test "left prompt: $argv[1]"
-    (__mean_print $argv[2] $argv[3]) = (fish_prompt)
+    (__mean_print $argv[2] 'brblack') = (fish_prompt)
   end
   test "right prompt: $argv[1]"
-    (__mean_print $argv[4] $argv[5]) = (fish_right_prompt)
+    (__mean_print $argv[3] $argv[4] $argv[5]) = (fish_right_prompt)
   end
 end
 
@@ -18,77 +22,85 @@ mkdir $path
 cd $path
 
 assert 'base path' \
-  '/p/t/fish-theme-mean-test ' 'brblack' \
+  '/p/t/fish-theme-mean-test ' \
   '' 'brblack'
 
 mkdir $path/repo
 cd $path/repo
 
 assert 'into inner folder' \
-  '/p/t/f/repo ' 'brblack' \
+  '/p/t/f/repo ' \
   '' 'brblack'
 
-git init
+git_ init
 
 assert 'init repository' \
-  '/p/t/f/repo ' 'brblack' \
+  '/p/t/f/repo ' \
   'HEAD' 'brblack'
 
 touch file
 
 assert 'first commit' \
-  '/p/t/f/repo ' 'brblack' \
+  '/p/t/f/repo ' \
   'HEAD' 'yellow'
 
-git add file
-git -c user.name=mariza -c user.email=mariza commit -m 'first commit'
+git_ add file
+git_ -c user.name=mariza -c user.email=mariza commit -m 'first commit'
 
 assert 'first commit' \
-  '/p/t/f/repo ' 'brblack' \
+  '/p/t/f/repo ' \
   'master' 'brblack'
 
-git checkout -b 'dev'
+git_ checkout -b 'dev'
 
 assert 'get into new branch' \
-  '/p/t/f/repo ' 'brblack' \
+  '/p/t/f/repo ' \
   'dev' 'brblack'
 
 cd $path
 mkdir $path/remote-repo
 cd remote-repo
-git init
+git_ init
 cd $path/repo
-git remote add origin $path/remote-repo
-git push -u origin dev
+git_ remote add origin $path/remote-repo
+git_ push -u origin dev
 
 assert 'synced to remote' \
-  '/p/t/f/repo ' 'brblack' \
+  '/p/t/f/repo ' \
   'dev' 'brblack'
 
 touch file2
-git add .
-git -c user.name=mariza -c user.email=mariza commit -m "second commit"
+git_ add .
+git_ -c user.name=mariza -c user.email=mariza commit -m "second commit"
 
 assert 'ahead of remote' \
-  '/p/t/f/repo ' 'brblack' \
+  '/p/t/f/repo ' \
   'dev' 'cyan'
 
-git push
+git_ push
 
 assert 'resynced to remote' \
-  '/p/t/f/repo ' 'brblack' \
+  '/p/t/f/repo ' \
   'dev' 'brblack'
 
-git reset --hard HEAD~1
+git_ reset --hard HEAD~1
 
 assert 'behind remote' \
-  '/p/t/f/repo ' 'brblack' \
+  '/p/t/f/repo ' \
   'dev' 'brred'
 
-git pull
+git_ pull
 
 assert 'reresynced remote' \
-  '/p/t/f/repo ' 'brblack' \
+  '/p/t/f/repo ' \
   'dev' 'brblack'
+
+touch file3
+git_ add .
+git_ stash
+
+assert 'stashed' \
+  '/p/t/f/repo ' \
+  'dev' 'brblack' '-u'
 
 rm -rf $path
