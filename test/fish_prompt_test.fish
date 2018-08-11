@@ -53,4 +53,36 @@ assert 'get into new branch' \
   '/p/t/f/repo ' 'brblack' \
   'dev' 'brblack'
 
+cd $path
+mkdir $path/remote-repo
+cd remote-repo
+git init
+cd $path/repo
+git remote add origin $path/remote-repo
+git push -u origin dev
+
+assert 'synced to remote' \
+  '/p/t/f/repo ' 'brblack' \
+  'dev' 'brblack'
+
+touch file2
+git add .
+git -c user.name=mariza -c user.email=mariza commit -m "second commit"
+
+assert 'ahead of remote' \
+  '/p/t/f/repo ' 'brblack' \
+  'dev' 'cyan'
+
+git push
+
+assert 'resynced to remote' \
+  '/p/t/f/repo ' 'brblack' \
+  'dev' 'brblack'
+
+git reset --hard HEAD~1
+
+assert 'behind remote' \
+  '/p/t/f/repo ' 'brblack' \
+  'dev' 'brblack'
+
 rm -rf $path

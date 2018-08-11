@@ -15,10 +15,26 @@ function _git_head_ref
   git rev-parse --abbrev-ref HEAD 2> /dev/null
 end
 
+function _git_dirty
+  git status -s 2> /dev/null
+end
+
+function _git_ahead
+  set branches (git status -sb --porcelain | sed 's/## //' | sed 's/\.\.\./ /')
+  set local_branch (echo $branches | awk '{ print $1 }')
+  set remote_branch (echo $branches | awk '{ print $2 }')
+
+  git rev-list --count "$remote_branch..$local_branch"
+end
+
 function _git_color
-  set git_status (git status -s 2> /dev/null)
-  if [ "$git_status" ]
+  set dirty (_git_dirty)
+  set ahead (_git_ahead)
+
+  if [ "$dirty" ]
     echo 'yellow'
+  else if [ $ahead != '0' ]
+    echo 'cyan'
   else
     echo 'brblack'
   end
