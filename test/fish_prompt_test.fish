@@ -4,14 +4,18 @@ function git_
   git $argv > /dev/null ^ /dev/null
 end
 
-function assert -d \
-  'checks the value and color for each prompt.
-   args: description left-text right-text right-color right-options'
-  test "left prompt: $argv[1]"
-    (__mean_print $argv[2] 'white') = (fish_prompt)
+function assert \
+  -a description left_text right_text right_color right_option
+
+  set left_prompt (__mean_print $left_text 'white')
+  set right_prompt (__mean_print $right_text $right_color $right_option)
+
+  test "left prompt: $description"
+    $left_prompt = (fish_prompt)
   end
-  test "right prompt: $argv[1]"
-    (__mean_print $argv[3] $argv[4] $argv[5]) = (fish_right_prompt)
+
+  test "right prompt: $description"
+    $right_prompt = (fish_right_prompt)
   end
 end
 
