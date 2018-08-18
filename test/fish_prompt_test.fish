@@ -7,8 +7,12 @@ end
 function assert \
   -a description left_text right_text right_color right_option
 
-  set left_prompt (__mean_print $left_text 'white')
-  set right_prompt (__mean_print $right_text $right_color $right_option)
+  if [ $left_text ]
+    set left_prompt (__mean_print $left_text 'white')
+  end
+  if [ $right_text ]
+    set right_prompt (__mean_print $right_text $right_color $right_option)
+  end
 
   test "left prompt: $description"
     $left_prompt = (fish_prompt)
@@ -26,15 +30,13 @@ mkdir $path
 cd $path
 
 assert 'base path' \
-  '/p/t/fish-theme-mean-test ' \
-  '' 'brblack'
+  '/p/t/fish-theme-mean-test '
 
 mkdir $path/repo
 cd $path/repo
 
 assert 'into inner folder' \
-  '/p/t/f/repo ' \
-  '' 'brblack'
+  '/p/t/f/repo '
 
 git_ init
 
