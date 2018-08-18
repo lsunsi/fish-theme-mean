@@ -23,14 +23,14 @@ cd $path
 
 assert 'base path' \
   '/p/t/fish-theme-mean-test ' \
-  '' 'white'
+  '' 'brblack'
 
 mkdir $path/repo
 cd $path/repo
 
 assert 'into inner folder' \
   '/p/t/f/repo ' \
-  '' 'white'
+  '' 'brblack'
 
 git_ init
 
@@ -49,13 +49,13 @@ git_ -c user.name=mariza -c user.email=mariza commit -m 'first commit'
 
 assert 'first commit' \
   '/p/t/f/repo ' \
-  'master' 'white'
+  'master' 'brblack'
 
 git_ checkout -b 'dev'
 
 assert 'get into new branch' \
   '/p/t/f/repo ' \
-  'dev' 'white'
+  'dev' 'brblack'
 
 cd $path
 mkdir $path/remote-repo
