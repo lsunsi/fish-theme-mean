@@ -1,0 +1,11 @@
+language: generic
+os: osx
+sudo: required
+env:
+  - HOMEBREW_NO_AUTO_UPDATE=1
+install:
+  - brew install fish
+  - curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs git.io/fisher
+  - fish -c "fisher fishtape"
+script:
+  - fish -c "fishtape test/*_test.fish"
