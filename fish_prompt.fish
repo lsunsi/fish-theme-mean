@@ -36,8 +36,10 @@ function __mean_git_color
     echo 'brred'
   else if [ -n "$ahead" -a "$ahead" != '0' ]
     echo 'cyan'
-  else
+  else if [ "$remote" ]
     echo 'white'
+  else
+    echo 'brblack'
   end
 end
 
