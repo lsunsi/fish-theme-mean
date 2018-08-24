@@ -87,7 +87,7 @@ git_ reset --hard HEAD~1
 
 assert 'behind remote' \
   '/p/t/f/repo ' \
-  'dev' 'brred'
+  'dev' 'brmagenta'
 
 git_ pull
 
@@ -95,11 +95,25 @@ assert 'reresynced remote' \
   '/p/t/f/repo ' \
   'dev' 'white'
 
+git_ reset HEAD~1
+git_ add .
+git_ -c user.name=mariza -c user.email=mariza commit -m "third commit"
+
+assert 'diverged' \
+  '/p/t/f/repo ' \
+  'dev' 'brred'
+
 touch file3
 git_ add .
 git_ stash
 
 assert 'stashed' \
+  '/p/t/f/repo ' \
+  'dev' 'brred' '-u'
+
+git_ push -f
+
+assert 'rereresynced remote' \
   '/p/t/f/repo ' \
   'dev' 'white' '-u'
 

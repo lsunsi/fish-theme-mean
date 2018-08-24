@@ -30,6 +30,8 @@ What we came up to is:
 4. You commit your changes locally, so you're ahead.
 5. You push your changes to remote, so you're clean again.
 6. Someone makes some changes on remote, so you're behind.
+7. You commit to on last change locally, so you diverged.
+8. You force push to remote, and you're clean and done.
 
 These states are currently being modelled like so:
 
@@ -39,7 +41,8 @@ untracked | brblack
 tracked | white
 dirty | yellow
 ahead | cyan
-behind | red
+behind | magenta
+diverged | red
 
 ## Development
 

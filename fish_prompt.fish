@@ -32,10 +32,12 @@ function __mean_git_color
 
   if [ "$dirty" ]
     echo 'yellow'
-  else if [ -n "$behind" -a "$behind" != '0' ]
+  else if [ -n "$ahead" -a -n "$behind" -a "$ahead" != '0' -a "$behind" != '0' ]
     echo 'brred'
   else if [ -n "$ahead" -a "$ahead" != '0' ]
     echo 'cyan'
+  else if [ -n "$behind" -a "$behind" != '0' ]
+    echo 'brmagenta'
   else if [ "$remote" ]
     echo 'white'
   else
