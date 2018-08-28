@@ -21,6 +21,10 @@ function __mean_git_stash_list
   git stash list 2> /dev/null
 end
 
+function __mean_git_is_inside
+  git rev-parse --is-inside-work-tree 2> /dev/null
+end
+
 function __mean_git_color
   set branches (__mean_git_branches)
   set local (echo $branches | awk '{ print $1 }')
@@ -64,9 +68,13 @@ function fish_prompt
 end
 
 function fish_right_prompt
-  set text (__mean_git_head_ref)
-  set color (__mean_git_color)
-  set options (__mean_git_color_options)
+  set enabled (__mean_git_is_inside)
 
-  __mean_print "$text" "$color" $options
+  if [ "$enabled" ]
+    set text (__mean_git_head_ref)
+    set color (__mean_git_color)
+    set options (__mean_git_color_options)
+
+    __mean_print "$text" "$color" $options
+  end
 end

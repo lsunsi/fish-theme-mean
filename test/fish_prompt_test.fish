@@ -4,14 +4,22 @@ function git_
   git $argv > /dev/null ^ /dev/null
 end
 
-function assert -d \
-  'checks the value and color for each prompt.
-   args: description left-text right-text right-color right-options'
-  test "left prompt: $argv[1]"
-    (__mean_print $argv[2] 'white') = (fish_prompt)
+function assert \
+  -a description left_text right_text right_color right_option
+
+  if [ $left_text ]
+    set left_prompt (__mean_print $left_text 'white')
   end
-  test "right prompt: $argv[1]"
-    (__mean_print $argv[3] $argv[4] $argv[5]) = (fish_right_prompt)
+  if [ $right_text ]
+    set right_prompt (__mean_print $right_text $right_color $right_option)
+  end
+
+  test "left prompt: $description"
+    $left_prompt = (fish_prompt)
+  end
+
+  test "right prompt: $description"
+    $right_prompt = (fish_right_prompt)
   end
 end
 
@@ -22,15 +30,13 @@ mkdir $path
 cd $path
 
 assert 'base path' \
-  '/p/t/fish-theme-mean-test ' \
-  '' 'brblack'
+  '/p/t/fish-theme-mean-test '
 
 mkdir $path/repo
 cd $path/repo
 
 assert 'into inner folder' \
-  '/p/t/f/repo ' \
-  '' 'brblack'
+  '/p/t/f/repo '
 
 git_ init
 
