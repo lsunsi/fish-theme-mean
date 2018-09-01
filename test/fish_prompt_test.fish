@@ -50,6 +50,8 @@ assert 'into inner folder' \
   "$prompt_path_prefix/f/repo "
 
 git_ init
+git_ config user.name 'mariza'
+git_ config user.email 'mariza@email'
 
 assert 'init repository' \
   "$prompt_path_prefix/f/repo " \
@@ -62,7 +64,7 @@ assert 'first commit' \
   'HEAD' 'yellow'
 
 git_ add file
-git_ -c user.name=mariza -c user.email=mariza commit -m 'first commit'
+git_ commit -m 'first commit'
 
 assert 'first commit' \
   "$prompt_path_prefix/f/repo " \
@@ -88,7 +90,7 @@ assert 'synced to remote' \
 
 touch file2
 git_ add .
-git_ -c user.name=mariza -c user.email=mariza commit -m "second commit"
+git_ commit -m "second commit"
 
 assert 'ahead of remote' \
   "$prompt_path_prefix/f/repo " \
@@ -114,7 +116,7 @@ assert 'reresynced remote' \
 
 git_ reset HEAD~1
 git_ add .
-git_ -c user.name=mariza -c user.email=mariza commit -m "third commit"
+git_ commit -m "third commit"
 
 assert 'diverged' \
   "$prompt_path_prefix/f/repo " \
