@@ -23,44 +23,57 @@ function assert \
   end
 end
 
+function os_prompt_path_prefix
+  set os_name (uname -s)
+
+  if [ $os_name = 'Darwin' ]
+    echo '/p/t'
+  else
+    echo '/t'
+  end
+end
+
 set path '/tmp/fish-theme-mean-test'
+set prompt_path_prefix (os_prompt_path_prefix)
 
 rm -rf $path
 mkdir $path
 cd $path
 
 assert 'base path' \
-  '/p/t/fish-theme-mean-test '
+  "$prompt_path_prefix/fish-theme-mean-test "
 
 mkdir $path/repo
 cd $path/repo
 
 assert 'into inner folder' \
-  '/p/t/f/repo '
+  "$prompt_path_prefix/f/repo "
 
 git_ init
+git_ config user.name 'mariza'
+git_ config user.email 'mariza@email'
 
 assert 'init repository' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'HEAD' 'white'
 
 touch file
 
 assert 'first commit' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'HEAD' 'yellow'
 
 git_ add file
-git_ -c user.name=mariza -c user.email=mariza commit -m 'first commit'
+git_ commit -m 'first commit'
 
 assert 'first commit' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'master' 'brblack'
 
 git_ checkout -b 'dev'
 
 assert 'get into new branch' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'dev' 'brblack'
 
 cd $path
@@ -72,41 +85,41 @@ git_ remote add origin $path/remote-repo
 git_ push -u origin dev
 
 assert 'synced to remote' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'dev' 'white'
 
 touch file2
 git_ add .
-git_ -c user.name=mariza -c user.email=mariza commit -m "second commit"
+git_ commit -m "second commit"
 
 assert 'ahead of remote' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'dev' 'cyan'
 
 git_ push
 
 assert 'resynced to remote' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'dev' 'white'
 
 git_ reset --hard HEAD~1
 
 assert 'behind remote' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'dev' 'brmagenta'
 
 git_ pull
 
 assert 'reresynced remote' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'dev' 'white'
 
 git_ reset HEAD~1
 git_ add .
-git_ -c user.name=mariza -c user.email=mariza commit -m "third commit"
+git_ commit -m "third commit"
 
 assert 'diverged' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'dev' 'brred'
 
 touch file3
@@ -114,13 +127,13 @@ git_ add .
 git_ stash
 
 assert 'stashed' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'dev' 'brred' '-u'
 
 git_ push -f
 
 assert 'rereresynced remote' \
-  '/p/t/f/repo ' \
+  "$prompt_path_prefix/f/repo " \
   'dev' 'white' '-u'
 
 rm -rf $path
