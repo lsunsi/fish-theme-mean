@@ -9,7 +9,7 @@ A minimalistic single-line bilateral fish prompt theme.
 
 ## Installation
 
-- `fisher lsunsi/fish-theme-mean`
+- `fisher install lsunsi/fish-theme-mean`
 
 ## Git color code
 
